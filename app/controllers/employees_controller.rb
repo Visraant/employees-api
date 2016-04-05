@@ -17,7 +17,11 @@ class EmployeesController < ApplicationController
       birthdate: params[:birthdate],
       ssn: params[:ssn]
     )
-    render "show.json.jbuilder"
+    if @employee.save
+      render "show.json.jbuilder"
+      render json: {message: "Success!"}
+    else
+      render json: {message: "Could not create employee!"}
   end
 
   def update
@@ -29,12 +33,17 @@ class EmployeesController < ApplicationController
       birthdate: params[:birthdate],
       ssn: params[:ssn] 
     )
-    render "show.json.jbuilder"
+    if @employee.save
+      render "show.json.jbuilder"
+      render json: {message: "Success!"}
+    else
+      render json: {message: "Could not update employee!"}
   end
 
   def destroy
     @employee = Employee.find_by(id: params[:id])
     @employee.destroy
     render "show.json.jbuilder"
+    render json: {message: "Destroyed!"}
   end
 end
