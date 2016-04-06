@@ -1,4 +1,4 @@
-class EmployeesController < ApplicationController
+class Api::V1::EmployeesController < ApplicationController
   def index
     @employees = Employee.all
     render "index.json.jbuilder"
@@ -22,28 +22,29 @@ class EmployeesController < ApplicationController
       render json: {message: "Success!"}
     else
       render json: {message: "Could not create employee!"}
+    end
   end
 
   def update
     @employee = Employee.find_by(id: params[:id])
     @employee.update(
-      first_name: params[:first_name],
-      last_name: params[:last_name],
-      email: params[:email],
-      birthdate: params[:birthdate],
-      ssn: params[:ssn] 
+      first_name: params[:first_name] || @employee.first_name,
+      last_name: params[:last_name] || @employee.last_name,
+      email: params[:email] || @employee.email,
+      birthdate: params[:birthdate] || @employee.birthdate,
+      ssn: params[:ssn] || @employee.ssn 
     )
     if @employee.save
       render "show.json.jbuilder"
       render json: {message: "Success!"}
     else
       render json: {message: "Could not update employee!"}
+    end
   end
 
   def destroy
     @employee = Employee.find_by(id: params[:id])
     @employee.destroy
-    render "show.json.jbuilder"
     render json: {message: "Destroyed!"}
   end
 end
